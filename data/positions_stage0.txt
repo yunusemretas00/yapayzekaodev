@@ -1,0 +1,5 @@
+# Aşama 0 perft konumları (hamle dizisi, ilk hamle MAX).
+# Kontrol noktasında öğretmenin konumları buraya yazılır ya da --pos ile verilir.
+3 3 4 4 5 5                                   # föydeki örnek: X 3'lü, 2 ve 6 MAX için zehirli
+5 1 4 4 7 2 4 0 5 5 7 6 1 6 7 1 6 7 6 4 6     # 21 hamle, sütun 6 dolu
+7 0 3 2 0 1 6 7 2 7 3 1 7 7 5 4 2 4 3         # 19 hamle, sütun 7 dolu
