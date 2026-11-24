@@ -2,6 +2,8 @@
 
 **Varyant: (R, C, K, V, d) = (5, 8, 4, 2, 42)** · öğrenci no 232511042 · 5 satır × 8 sütun, 4'lü dizi, **Misère** (diziyi yapan kaybeder, tahta dolarsa berabere).
 
+Kod ve commit geçmişi: <https://github.com/yunusemretas00/yapayzekaodev>
+
 Makine: Intel Core (Family 6 Model 186), Windows 11, Python 3.12.6. Her sayı `experiments/` altındaki betikle, sabit seed'lerle yeniden üretilebilir (bkz. README). Tüm değerler MAX gözüyledir (minimax, negamax değil).
 
 ---
@@ -142,7 +144,7 @@ Bedel: aynı sürede ulaşılan nominal derinlik ~2 yarı-hamle azalıyor (12.0 
 * *Hangi karar yol açtı?* (1) **Derinlik:** Python'da ~185 bin düğüm/s ile 1 s'de 10–12 yarı-hamle derinliğe iniliyor. Misère'de kayıplar 20+ yarı-hamle sonraki zugzwang'dan geliyor (kayıp oyunlar 31–37. hamlede bitti). (2) **Eval:** f1–f6 zehirli hücreleri sayıyor ama hangi oyuncunun onları **doldurmaya zorlanacağını** (sıra/parite) bilmiyor. Bu konumda Eval −0.2 ile −0.3 arasında; kayıp konumla eşit konumu ayıramıyor. (3) Kuramsal olarak ilk oyuncu dezavantajlı (yukarıdaki teorem).
 * *Bir sonraki sürümde ne değiştirirdim?* **Parite/zugzwang özniteliği:** her zehirli hücre için, oyun "güvenli hücreler bitene kadar" oynanırsa onu kimin doldurmak zorunda kalacağını, satırın ve kalan boş hücre sayısının paritesinden tahmin eden bir öznitelik. Bunu daha hızlı bir motora (bitboard + C/Numba) tercih ediyorum. Gerekçe: hız 2–3 kat artarsa derinlik ancak 1–2 yarı-hamle artar, kayıp ise 6+ yarı-hamle derinde. Doğru bir parite bilgisi ise kaybı "ufkun ötesinden" Eval'e taşır; Aşama 3'te öznitelik değişikliği (B → A) 3/40'tan 36/40'a çıkarmıştı. İkinci oyuncuyken "arama kanıtlanmış kazanç görmedikçe ayna hamlesi" kuralı kaybı imkânsız kılar (ikinci oynadığım 35 oyunda 3 kayıp vardı). Ancak aramam simetriyi genellikle ilk hamlede bozuyor, yani bu kural kazançların bir kısmını beraberliğe çevirebilir; bu takası ölçmeden benimsemezdim.
 
-*(Not: Föy, yenilgi analizinin gerçek sınıf turnuvasından seçilmesini istiyor. Turnuvadan sonra bu bölüm, `exp5_tournament.py` içindeki `analyse_loss` ile aynı yöntem uygulanarak turnuvada kaybedilen oyunla güncellenecek.)*
+*(Sınıf turnuvası yapılmadığı için yenilgi analizi, aynı protokol ve 1 s sınırla oynanan yerel turnuvadan seçildi.)*
 
 ## Bonus — Monte Carlo ağaç araması
 

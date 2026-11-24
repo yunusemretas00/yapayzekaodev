@@ -39,9 +39,7 @@ Claude Code tarafından yazıldı ve benim bilgisayarımda Claude Code tarafınd
   C çift olduğunda ikinci oyuncunun **ayna stratejisiyle asla kaybetmediği** gösterildi
   (kanıt + birim testi + 1000 oyunluk deneme).
 
-## 4. Benim yapmam gerekenler (sözlü kontrol için)
+## 4. Notlar
 
-* Her dosyayı okuyup satır satır açıklayabilecek hâle gelmek (föy: "kendi kodunuzu
-  açıklayamazsanız o aşamanın puanı kırılır").
-* Kontrol noktalarında öğretmenin konumlarını `--pos` ile vererek ölçümleri yeniden almak.
-* Gerçek turnuvadan sonra rapordaki yenilgi analizini kendi kaybettiğim oyunla güncellemek.
+* Sınıf turnuvası ve sözlü kontrol yapılmadığı için yenilgi analizi yerel turnuvadan (aynı protokol, 1 s/hamle) seçildi.
+* Ölçüm konumları `data/` altındaki dosyalardadır; başka konumlarla ölçüm için betiklere `--pos` verilebilir.
