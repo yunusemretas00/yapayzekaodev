@@ -181,6 +181,24 @@ class TestModel(unittest.TestCase):
         self.assertEqual(g.utility(s), 0)
         self.assertEqual(g.actions(s), [])
 
+    def test_misere_mirror_strategy_never_loses(self):
+        """Varyantıma özgü kuram: C çift, engel yok, Misère -> ikinci oyuncu her hamlede
+        rakibin sütununun aynasına (C-1-c) oynarsa ASLA ilk diziyi yapan olmaz.
+        (Tahta renk değiştirmiş ayna simetrisinde kalır; O'nun bir dizisinin aynası X'in
+        bir hamle önce tamamladığı dizi olurdu.) 300 rastgele ilk oyuncuya karşı sına."""
+        g = my_game()
+        rng = random.Random(2024)
+        for _ in range(300):
+            s = g.initial_state()
+            while not g.is_terminal(s):
+                if s.to_move == MAX:
+                    s = g.result(s, rng.choice(g.actions(s)))
+                else:
+                    a = g.C - 1 - s.last % g.C
+                    self.assertIn(a, g.actions(s))          # ayna hamlesi her zaman yasal
+                    s = g.result(s, a)
+            self.assertNotEqual(g.winner(s), MAX)
+
     def test_cylinder_wraps(self):
         g = Game(5, 8, 4, CYLINDER)
         seq = [6, 6, 7, 7, 0, 0, 1]          # 6-7-0-1 kenardan geçen yatay

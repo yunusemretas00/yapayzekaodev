@@ -21,7 +21,7 @@ kaçınmam gereken "zehirli hücre"dir. Hangi işaretin doğru olduğu exp3 ile 
 """
 import math
 
-from game import MISERE
+from game import MISERE, CYLINDER
 
 FEATURES = ("f1", "f2", "f3", "f4", "f5", "f6")
 
@@ -38,7 +38,12 @@ DEFAULT_MISERE = "A"
 
 
 def default_weights(game):
-    return dict(WEIGHT_SETS[DEFAULT_MISERE] if game.V == MISERE else W_STANDARD)
+    if game.V == MISERE:
+        return dict(WEIGHT_SETS[DEFAULT_MISERE])
+    w = dict(W_STANDARD)
+    if game.V == CYLINDER:
+        w["f5"] = 0.0          # silindirde her sütun eşdeğer: "merkez" yok
+    return w
 
 
 class Evaluator:
