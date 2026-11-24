@@ -76,3 +76,116 @@ def minimax_decision(game, s, depth, evalf=eval_zero, stats=None, root_order=Non
         if best_v is None or (v > best_v if maximizing else v < best_v):
             best_a, best_v = a, v
     return best_a, best_v, stats.nodes
+
+
+# ====================================================================== SIRALAMA
+# Her sıralama fonksiyonu: order(game, s, actions) -> yeni liste.
+def order_none(game, s, actions):
+    """(a) sıralamasız: soldan sağa."""
+    return actions
+
+
+def order_center(game, s, actions):
+    """(b) merkezden dışarı."""
+    cd = game.center_dist
+    return sorted(actions, key=lambda a: (cd[a], a))
+
+
+def order_threat(game, s, actions):
+    """(c) önce oyunu sırası gelen lehine bitiren hamle, sonra rakibin dizisini
+    tamamlayacağı hücreyi kapatan (engelleme) hamle, sonra merkezden dışarı;
+    sırası gelenin kendi aleyhine oyunu bitiren hamleler EN SONA.
+
+    Standart: kendi dizini tamamlamak = kazanç (0), rakibin hücresini kapatmak = engel (1).
+    Misère:   kendi dizini tamamlamak = kayıp (3, en sona); rakibin 'zehirli' hücresini
+              doldurmak onu kurtarmaktır (2, normal hamlelerden sonra).
+    """
+    me = s.to_move
+    opp = 3 - me
+    misere = game.V == 2
+    cd = game.center_dist
+    keyed = []
+    for a in actions:
+        if game.completes_line(s, a, me):
+            pri = 3 if misere else 0
+        elif game.completes_line(s, a, opp):
+            pri = 2 if misere else 1
+        else:
+            pri = 1.5 if misere else 2
+        keyed.append((pri, cd[a], a))
+    keyed.sort()
+    return [k[2] for k in keyed]
+
+
+ORDERINGS = {"a": order_none, "b": order_center, "c": order_threat}
+
+
+# ====================================================================== ALFA-BETA
+def ab_max_value(game, s, depth, alpha, beta, evalf, order, stats):
+    stats.nodes += 1
+    if game.is_terminal(s):
+        return game.utility(s)
+    if depth == 0:
+        return evalf(game, s)
+    v = -INF
+    acts = game.actions(s)
+    if order is not None:
+        acts = order(game, s, acts)
+    for a in acts:
+        v = max(v, ab_min_value(game, game.result(s, a), depth - 1, alpha, beta, evalf, order, stats))
+        if v >= beta:            # beta kesmesi
+            return v
+        alpha = max(alpha, v)
+    return v
+
+
+def ab_min_value(game, s, depth, alpha, beta, evalf, order, stats):
+    stats.nodes += 1
+    if game.is_terminal(s):
+        return game.utility(s)
+    if depth == 0:
+        return evalf(game, s)
+    v = INF
+    acts = game.actions(s)
+    if order is not None:
+        acts = order(game, s, acts)
+    for a in acts:
+        v = min(v, ab_max_value(game, game.result(s, a), depth - 1, alpha, beta, evalf, order, stats))
+        if v <= alpha:           # alfa kesmesi
+            return v
+        beta = min(beta, v)
+    return v
+
+
+def alphabeta_value(game, s, depth, evalf=eval_zero, order=None, stats=None):
+    stats = stats or Stats()
+    f = ab_max_value if game.to_move(s) == MAX else ab_min_value
+    return f(game, s, depth, -INF, INF, evalf, order, stats)
+
+
+def alphabeta_decision(game, s, depth, evalf=eval_zero, order=None, stats=None):
+    """Kökte alpha = -inf, beta = +inf. Her çocuk aynı (alpha, beta) ile çağrılır
+    ve kökte alpha (MIN sıradaysa beta) güncellenir.
+    Dönüş: (hamle, değer, düğüm_sayısı)."""
+    stats = stats or Stats()
+    stats.nodes += 1
+    acts = game.actions(s)
+    if not acts:
+        return None, game.utility(s), stats.nodes
+    if order is not None:
+        acts = order(game, s, acts)
+    alpha, beta = -INF, INF
+    best_a, best_v = None, None
+    if game.to_move(s) == MAX:
+        for a in acts:
+            v = ab_min_value(game, game.result(s, a), depth - 1, alpha, beta, evalf, order, stats)
+            if best_v is None or v > best_v:
+                best_a, best_v = a, v
+            alpha = max(alpha, v)
+    else:
+        for a in acts:
+            v = ab_max_value(game, game.result(s, a), depth - 1, alpha, beta, evalf, order, stats)
+            if best_v is None or v < best_v:
+                best_a, best_v = a, v
+            beta = min(beta, v)
+    return best_a, best_v, stats.nodes
