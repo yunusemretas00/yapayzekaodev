@@ -8,10 +8,12 @@ Doğruluk: 50 konumun 50'inde α-β değeri = minimax değeri, seçilen hamlenin
 
 | yöntem | ort. düğüm | geom. ort. | minimax'a oran (ort.) | b_etkin (geom.) | ort. süre (ms) | sıralama çağrısı (µs) | doğru |
 |---|---|---|---|---|---|---|---|
-| minimax | 186,242 | 162,257 | 100 % | 7.39 | 809 | - | - |
-| a: sıralamasız | 1,506 | 1,446 | 1.0 % | 3.36 | 7.7 | 0.4 | 50 |
-| b: merkezden dışarı | 1,568 | 1,519 | 1.0 % | 3.39 | 10.5 | 2.9 | 50 |
-| c: kazan/engelle + merkez | 1,375 | 1,323 | 0.9 % | 3.31 | 21.0 | 22.8 | 50 |
+| minimax | 186,242 | 162,257 | 100 % | 7.39 | 369 | - | - |
+| a: sıralamasız | 1,506 | 1,446 | 1.0 % | 3.36 | 3.4 | 0.1 | 50 |
+| b: merkezden dışarı | 1,568 | 1,519 | 1.0 % | 3.39 | 4.9 | 0.9 | 50 |
+| c: kazan/engelle + merkez | 1,375 | 1,323 | 0.9 % | 3.31 | 8.1 | 4.7 | 50 |
+| d: c + Misère'de kenardan içe | 1,389 | 1,334 | 0.9 % | 3.32 | 9.6 | 8.0 | 50 |
+| e: Eval tabanlı | 1,415 | 1,371 | 0.9 % | 3.33 | 12.0 | 9.3 | 50 |
 
 Kuramsal en iyi sıralama ≈ sqrt(minimax düğümü) ≈ b^(m/2): ortalama 419 düğüm (c sıralaması bunun 3.3 katı).
 
