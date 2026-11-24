@@ -1,0 +1,7 @@
+# Aşama 1-2 ölçüm konumları (5 konum). Öğretmenin konumları gelince bu dosyayı değiştirin
+# ya da --pos ile verin.
+3 3 4 4 5 5                                   # Q1: MAX'in 2 ve 6'sı zehirli
+5 1 3 6 7 7 3 0 1 1 4                         # Q2
+7 0 7 5 3 6 4 5 5 6 1                         # Q3
+4 7 7 7 6 0 4 5 7 1 7 5 5                     # Q4 (sütun 7 dolu)
+7 2 3 7 2 4 1 6 2 2 4 6 6 2 5                 # Q5 (sütun 2 dolu)
